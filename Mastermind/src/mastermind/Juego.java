@@ -8,13 +8,13 @@ public class Juego {
     HashMap<Integer, Integer> ans = new HashMap<Integer, Integer>();
     HashMap<Integer, Integer> clone = new HashMap<Integer, Integer>();
     ArrayList<Integer> pines = new ArrayList<Integer>();
-
-    public Juego() {
+    
+    public Juego(int[] codigo) {
         // Se crea la respuesta final y su clon.
-        ans.put(1, (int) (Math.random() * 8 + 1));
-        ans.put(2, (int) (Math.random() * 8 + 1));
-        ans.put(3, (int) (Math.random() * 8 + 1));
-        ans.put(4, (int) (Math.random() * 8 + 1));
+        ans.put(1, codigo[0]);
+        ans.put(2, codigo[1]);
+        ans.put(3, codigo[2]);
+        ans.put(4, codigo[3]);
         System.out.println(ans); // Se imprime la respuesta a la que se quiere llegar. Solo en desarollo, eliminar al terminar.
         newAttempt();
     }

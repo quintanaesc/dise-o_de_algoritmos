@@ -6,8 +6,12 @@ import java.util.Scanner;
 
 public class main {
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        Juego juego = new Juego(); // Se inicializa el juego, la respuesta final y los intentos disponibles.
+        
+    }
+    
+    public void nuevoJuego(int[] codigo){
+                Scanner scanner = new Scanner(System.in);
+        Juego juego = new Juego(codigo); // Se inicializa el juego, la respuesta final y los intentos disponibles.
         int attempts = 10;
         ArrayList<Integer> pines = new ArrayList<Integer>();
         HashMap<Integer, Integer> check = new HashMap<Integer, Integer>(); // HashMap en el que se van guardando las respuestas del jugador.

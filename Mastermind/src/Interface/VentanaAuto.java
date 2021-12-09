@@ -5,17 +5,18 @@
  */
 package Interface;
 
+
 /**
  *
  * @author 2im3q
  */
 public class VentanaAuto extends javax.swing.JFrame {
 
-    /**
-     * Creates new form ventanaAuto
-     */
-    public VentanaAuto() {
+    public static int[] codigo;
+    
+    public VentanaAuto(int[] codigo) {
         initComponents();
+        this.codigo=codigo;
     }
 
     /**
@@ -143,7 +144,7 @@ public class VentanaAuto extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new VentanaAuto().setVisible(true);
+                new VentanaAuto(codigo).setVisible(true);
             }
         });
     }

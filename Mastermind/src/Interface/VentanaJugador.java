@@ -19,7 +19,7 @@ public class VentanaJugador extends javax.swing.JFrame {
     public static int[] codigo;
     int[] intento=new int[4];
 
-    public VentanaJugador(int[] Codigo) {
+    public VentanaJugador(int[] codigo) {
         initComponents();
         this.codigo=codigo;
     }
@@ -210,13 +210,29 @@ public class VentanaJugador extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        intento[0]=Integer.parseInt(numero1.getText());
-        intento[1]=Integer.parseInt(numero2.getText());
-        intento[2]=Integer.parseInt(numero3.getText());
-        intento[3]=Integer.parseInt(numero4.getText());
-        System.out.println(intento[3]);
-    }//GEN-LAST:event_jButton1ActionPerformed
+        // comprobamos que los ingresos no sean nulos
+        if ((numero1.getText() != null) && (numero2.getText() != null)
+                && (numero4.getText() != null) && (numero3.getText() != null)) {
+            // comprobamos que los ingresos sean un numero entre 0 y 8
+            if ((Integer.parseInt(numero1.getText()) > 0) && (Integer.parseInt(numero1.getText()) < 8)
+                    && (Integer.parseInt(numero2.getText()) > 0) && (Integer.parseInt(numero2.getText()) < 8)
+                    && (Integer.parseInt(numero3.getText()) > 0) && (Integer.parseInt(numero3.getText()) < 8)
+                    && (Integer.parseInt(numero4.getText()) > 0) && (Integer.parseInt(numero4.getText()) < 8)) {
+                
+                //ingresamos los numeros en  intento
+                intento[0] = Integer.parseInt(numero1.getText());
+                intento[1] = Integer.parseInt(numero2.getText());
+                intento[2] = Integer.parseInt(numero3.getText());
+                intento[3] = Integer.parseInt(numero4.getText());
+                
+                intenta();
 
+            }
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+    private void intenta(){
+        
+    }
     private void numero4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_numero4ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_numero4ActionPerformed
