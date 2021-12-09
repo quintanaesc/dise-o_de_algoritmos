@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 public class Juego {
     //Se instancian los HashMaps de respuesta final y su clon.
-    HashMap<Integer, Integer> ans = new HashMap<Integer, Integer>();
+    public HashMap<Integer, Integer> ans = new HashMap<Integer, Integer>();
     HashMap<Integer, Integer> clone = new HashMap<Integer, Integer>();
     ArrayList<Integer> pines = new ArrayList<Integer>();
     
@@ -26,25 +26,29 @@ public class Juego {
     public ArrayList comprobar(HashMap check, int a) {
         if (a <= clone.size()) {
             if (clone.containsValue(check.get(a))) {
-              if (clone.get(a) == check.get(a)) {
-                System.out.print("|  RED  |");
-                clone.replace(a, 0);
-                pines.add(2);
-                } else {
-                    for (int i = 1; i <= clone.size(); i++) {
-                        if (clone.get(i) == check.get(a)) {
-                            System.out.print("| WHITE |");
-                            clone.replace(i, 0);
-                            pines.add(0, 1);
-                            break;
-                        }
+                for (int i = 1; i <= clone.size(); i++) {
+                    if (clone.get(i) == check.get(i)) {
+                        System.out.print("|  RED  |");
+                        clone.replace(i, 0);
+                        pines.add(2);
+                        break;
                     }
-                }               
+                }
+                for (int i = 1; i <= clone.size(); i++) {
+                    if (clone.get(i) == check.get(a)) {
+                        System.out.print("| WHITE |");
+                        clone.replace(i, 0);
+                        pines.add(1);
+                        break;
+                    }
+                }              
             } 
 
             a++;
             comprobar(check, a);
-        } return pines;
+        } 
+        
+        return pines;
     }
     
     // Este metodo clona la respuesta final para poder comparar la respuesta

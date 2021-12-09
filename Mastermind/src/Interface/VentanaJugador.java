@@ -7,8 +7,11 @@ package Interface;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.HashMap;
 import javax.swing.JFrame;
-
+import javax.swing.table.DefaultTableModel;
+import mastermind.Juego;
 
 /**
  *
@@ -17,13 +20,21 @@ import javax.swing.JFrame;
 public class VentanaJugador extends javax.swing.JFrame {
 
     public static int[] codigo;
-    int[] intento=new int[4];
+    int[] intento = new int[4];
+    ArrayList<Integer> pines = new ArrayList<Integer>();
+    DefaultTableModel modelo;
+    Juego juego;
+    HashMap<Integer, Integer> check = new HashMap<Integer, Integer>(); // HashMap en el que se van guardando las respuestas del jugador.
+    int attempts = 0;
+    boolean ganador;
 
     public VentanaJugador(int[] codigo) {
         initComponents();
-        this.codigo=codigo;
+        this.codigo = codigo;
+        juego = new Juego(codigo);
+        ganador = false;
+        modelo = (DefaultTableModel) jTable1.getModel();
     }
-
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -43,8 +54,10 @@ public class VentanaJugador extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
+        letrero = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(0, 204, 255));
 
@@ -52,16 +65,7 @@ public class VentanaJugador extends javax.swing.JFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null}
+
             },
             new String [] {
                 "N intento", "Digito 1", "Digito 2", "Digito 3", "Digito 4", "Pin 1", "Pin 2", "Pin 3", "Pin 4"
@@ -111,6 +115,12 @@ public class VentanaJugador extends javax.swing.JFrame {
             }
         });
 
+        numero2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                numero2ActionPerformed(evt);
+            }
+        });
+
         numero3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 numero3ActionPerformed(evt);
@@ -132,6 +142,11 @@ public class VentanaJugador extends javax.swing.JFrame {
         jLabel4.setText("Numero 4");
 
         jLabel5.setText("Ingresa números del 1 al 8");
+
+        letrero.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        letrero.setForeground(new java.awt.Color(255, 51, 51));
+        letrero.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        letrero.setText(" ");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -160,7 +175,10 @@ public class VentanaJugador extends javax.swing.JFrame {
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(16, 16, 16)
-                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 319, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 319, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(103, 103, 103)
+                        .addComponent(letrero, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -168,11 +186,6 @@ public class VentanaJugador extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(0, 22, Short.MAX_VALUE)
                         .addComponent(jLabel1)
@@ -190,8 +203,14 @@ public class VentanaJugador extends javax.swing.JFrame {
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(numero4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(29, 29, 29)))
-                .addComponent(jButton1)
+                        .addGap(29, 29, 29)
+                        .addComponent(jButton1))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(30, 30, 30)
+                        .addComponent(letrero, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(23, 23, 23))
         );
 
@@ -210,33 +229,83 @@ public class VentanaJugador extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // comprobamos que los ingresos no sean nulos
-        if ((numero1.getText() != null) && (numero2.getText() != null)
-                && (numero4.getText() != null) && (numero3.getText() != null)) {
-            // comprobamos que los ingresos sean un numero entre 0 y 8
-            if ((Integer.parseInt(numero1.getText()) > 0) && (Integer.parseInt(numero1.getText()) < 8)
-                    && (Integer.parseInt(numero2.getText()) > 0) && (Integer.parseInt(numero2.getText()) < 8)
-                    && (Integer.parseInt(numero3.getText()) > 0) && (Integer.parseInt(numero3.getText()) < 8)
-                    && (Integer.parseInt(numero4.getText()) > 0) && (Integer.parseInt(numero4.getText()) < 8)) {
-                
-                //ingresamos los numeros en  intento
-                intento[0] = Integer.parseInt(numero1.getText());
-                intento[1] = Integer.parseInt(numero2.getText());
-                intento[2] = Integer.parseInt(numero3.getText());
-                intento[3] = Integer.parseInt(numero4.getText());
-                
-                intenta();
+        try {
+            // comprobamos que los ingresos no sean nulos
+            if ((numero1.getText() != null) && (numero2.getText() != null)
+                    && (numero4.getText() != null) && (numero3.getText() != null)) {
+                // comprobamos que los ingresos sean un numero entre 0 y 8
+                if ((Integer.parseInt(numero1.getText()) > 0) && (Integer.parseInt(numero1.getText()) <= 8)
+                        && (Integer.parseInt(numero2.getText()) > 0) && (Integer.parseInt(numero2.getText()) <= 8)
+                        && (Integer.parseInt(numero3.getText()) > 0) && (Integer.parseInt(numero3.getText()) <= 8)
+                        && (Integer.parseInt(numero4.getText()) > 0) && (Integer.parseInt(numero4.getText()) <= 8)) {
 
+                    //ingresamos los numeros en  intento
+                    intento[0] = Integer.parseInt(numero1.getText());
+                    intento[1] = Integer.parseInt(numero2.getText());
+                    intento[2] = Integer.parseInt(numero3.getText());
+                    intento[3] = Integer.parseInt(numero4.getText());
+                    System.out.println("intento: " + Integer.valueOf(intento[0]) + Integer.valueOf(intento[1])
+                            + Integer.valueOf(intento[2]) + Integer.valueOf(intento[3]));// solo desarrollo
+                    attempts += 1;
+                    intenta();
+                } else {
+                    System.out.println("fuera de parametro");
+                }
             }
+        } catch (Exception e) {
+            System.out.println("digito vacio");
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
-    private void intenta(){
-        
-    }
-    private void numero4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_numero4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_numero4ActionPerformed
 
+    }//GEN-LAST:event_jButton1ActionPerformed
+    private void intenta() {
+
+        if (attempts > 0 && attempts <= 10 && ganador == false) { // Se itera mientras el jugador aun tenga intentos disponibles.
+            System.out.println("\n Intento: " + attempts);
+            System.out.println("Escribe 4 numeros del 1 al 8::");
+            check.put(1, intento[0]);
+            check.put(2, intento[1]);
+            check.put(3, intento[2]);
+            check.put(4, intento[3]);
+
+            System.out.println(check);
+
+            pines = juego.comprobar(check, 1); //Llamada al metodo que comprueba la respuesta propuesta
+            
+            //convertimos los pines a strings "White", "Red" o ""
+            String[] fichas=new String[4];
+            for (int i = 0; i < pines.size(); i++) {
+                if (pines.get(i)==1) {
+                    fichas[i]="White";
+                }else if (pines.get(i)==2) {
+                    fichas[i]="Red";
+                }
+                
+            }
+            //agregamos una linea a la tabla, para ello creamos los pines
+
+            modelo.addRow(new Object[]{attempts, intento[0], intento[1], intento[2], intento[3],
+                fichas[0],fichas[1],fichas[2],fichas[3]});
+
+            // Comprobacion para terminar el juego
+            if (check.get(1) != juego.ans.get(1) || check.get(2) != juego.ans.get(2)
+                    || check.get(3) != juego.ans.get(3) || check.get(4) != juego.ans.get(4)) {
+
+                juego.newAttempt();
+
+            } else {
+                System.out.println("\nFELICIDADES, GANASTE!!");
+                letrero.setText("FELICIDADES, GANASTE!!");
+                ganador = true;
+                return;
+            }
+
+        }
+        if (attempts == 10 && ganador == false) {
+            System.out.println("\nPERDISTE :(");
+            letrero.setText("PERDISTE :(");
+        }
+
+    }
     private void numero3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_numero3ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_numero3ActionPerformed
@@ -244,6 +313,14 @@ public class VentanaJugador extends javax.swing.JFrame {
     private void numero1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_numero1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_numero1ActionPerformed
+
+    private void numero2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_numero2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_numero2ActionPerformed
+
+    private void numero4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_numero4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_numero4ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -259,16 +336,24 @@ public class VentanaJugador extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(VentanaJugador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VentanaJugador.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(VentanaJugador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VentanaJugador.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(VentanaJugador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VentanaJugador.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(VentanaJugador.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VentanaJugador.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
@@ -298,11 +383,11 @@ public class VentanaJugador extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JLabel letrero;
     private javax.swing.JTextField numero1;
     private javax.swing.JTextField numero2;
     private javax.swing.JTextField numero3;
     private javax.swing.JTextField numero4;
     // End of variables declaration//GEN-END:variables
-
 
 }
