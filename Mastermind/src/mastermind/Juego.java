@@ -54,5 +54,6 @@ public class Juego {
         clone.put(2, ans.get(2));
         clone.put(3, ans.get(3));
         clone.put(4, ans.get(4));
+        pines.clear();
     }
 }
