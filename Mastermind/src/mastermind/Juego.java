@@ -24,8 +24,13 @@ public class Juego {
     // metodo incrementa el valor de 'a' y se llama a si mismo para comprobar
     // la siguiente llave.
     public ArrayList comprobar(HashMap check, int a) {
+        boolean[] existen= new boolean[8];
+        for (int i = 0; i < existen.length; i++) {
+            existen[i]=false;
+        }
+        
         if (a <= clone.size()) {
-            if (clone.containsValue(check.get(a))) {
+            if (clone.containsValue(check.get(a)) && existen[(int)check.get(a)]==false) {
                 for (int i = 1; i <= clone.size(); i++) {
                     if (clone.get(i) == check.get(i)) {
                         System.out.print("|  RED  |");
@@ -50,7 +55,7 @@ public class Juego {
         
         return pines;
     }
-    
+
     // Este metodo clona la respuesta final para poder comparar la respuesta
     // propuesta por el usuario sin alterar la respuesta final.
     public void newAttempt () {
