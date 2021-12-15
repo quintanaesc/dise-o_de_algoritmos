@@ -41,17 +41,40 @@ public class VentanaAuto extends javax.swing.JFrame {
             }
 
         }
-        while (attempts >= 1 && attempts <= 10 && ganador==false) {
-            intento[0] = intentos[attempts-1][0];
-            intento[1] = intentos[attempts-1][1];
-            intento[2] = intentos[attempts-1][2];
-            intento[3] = intentos[attempts-1][3];
+        while (attempts >= 1 && attempts <= 10 && ganador == false) {
+            intento[0] = intentos[attempts - 1][0];
+            intento[1] = intentos[attempts - 1][1];
+            intento[2] = intentos[attempts - 1][2];
+            intento[3] = intentos[attempts - 1][3];
             intenta();
             attempts += 1;
-            System.out.println("todo bien"+String.valueOf(attempts));
+            System.out.println("todo bien" + String.valueOf(attempts));
         };
     }
 
+    public void autoJuego() {
+        intento[0] = 1;
+        intento[1] = 2;
+        intento[2] = 3;
+        intento[3] = 4;
+        attempts += 1;
+        intenta();
+        while (attempts > 1 && attempts <= 10 && ganador == false) {
+            creaIntento();
+            intenta();
+            
+            System.out.println("todo bien" + String.valueOf(attempts));
+        };
+    }
+    public void creaIntento(){
+        int aux[]=new int[4];
+        for (int i = 0; i < aux.length; i++) {
+            aux[i]=intento[i];
+        }
+        for (int i = 0; i < aux.length; i++) {
+            intento[i]=juego.resuelve(aux,pines)[i];
+        }
+    }
     public void intenta() {
 
         if (attempts > 0 && attempts <= 10 && ganador == false) { // Se itera mientras el jugador aun tenga intentos disponibles.
