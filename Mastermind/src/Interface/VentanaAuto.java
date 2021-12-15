@@ -5,6 +5,10 @@
  */
 package Interface;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import javax.swing.table.DefaultTableModel;
+import mastermind.Juego;
 
 /**
  *
@@ -13,10 +17,87 @@ package Interface;
 public class VentanaAuto extends javax.swing.JFrame {
 
     public static int[] codigo;
-    
+    int[] intento = new int[4];
+    ArrayList<Integer> pines = new ArrayList<Integer>();
+    DefaultTableModel modelo;
+    Juego juego;
+    HashMap<Integer, Integer> check = new HashMap<Integer, Integer>(); // HashMap en el que se van guardando las respuestas del jugador.
+    int attempts = 1;
+    boolean ganador;
+
     public VentanaAuto(int[] codigo) {
         initComponents();
-        this.codigo=codigo;
+        modelo = (DefaultTableModel) jTable1.getModel();
+        this.codigo = codigo;
+        juego = new Juego(codigo);
+        ganador = false;
+    }
+
+    public void nJuego() {
+        int[][] intentos = new int[10][4];
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 4; j++) {
+                intentos[i][j] = (int) (Math.random() * 8 + 1);
+            }
+
+        }
+        while (attempts >= 1 && attempts <= 10 && ganador==false) {
+            intento[0] = intentos[attempts-1][0];
+            intento[1] = intentos[attempts-1][1];
+            intento[2] = intentos[attempts-1][2];
+            intento[3] = intentos[attempts-1][3];
+            intenta();
+            attempts += 1;
+            System.out.println("todo bien"+String.valueOf(attempts));
+        };
+    }
+
+    public void intenta() {
+
+        if (attempts > 0 && attempts <= 10 && ganador == false) { // Se itera mientras el jugador aun tenga intentos disponibles.
+            System.out.println("\n Intento: " + attempts);
+            System.out.println("Escribe 4 numeros del 1 al 8::");
+            check.put(1, intento[0]);
+            check.put(2, intento[1]);
+            check.put(3, intento[2]);
+            check.put(4, intento[3]);
+
+            System.out.println(check);
+
+            pines = juego.comprobar(check, 1); //Llamada al metodo que comprueba la respuesta propuesta
+
+            //convertimos los pines a strings "White", "Red" o ""
+            String[] fichas = new String[4];
+            for (int i = 0; i < pines.size(); i++) {
+                if (pines.get(i) == 1) {
+                    fichas[i] = "White";
+                } else if (pines.get(i) == 2) {
+                    fichas[i] = "Red";
+                }
+
+            }
+            //agregamos una linea a la tabla, para ello creamos los pines
+
+            modelo.addRow(new Object[]{attempts, intento[0], intento[1], intento[2], intento[3],
+                fichas[0], fichas[1], fichas[2], fichas[3]});
+
+            // Comprobacion para terminar el juego
+            if (check.get(1) != juego.ans.get(1) || check.get(2) != juego.ans.get(2)
+                    || check.get(3) != juego.ans.get(3) || check.get(4) != juego.ans.get(4)) {
+
+                juego.newAttempt();
+
+            } else {
+                System.out.println("\nFELICIDADES, GANASTE!!");
+                ganador = true;
+                return;
+            }
+
+        }
+        if (attempts == 10 && ganador == false) {
+            System.out.println("\nPERDISTE :(");
+        }
+
     }
 
     /**
@@ -40,16 +121,7 @@ public class VentanaAuto extends javax.swing.JFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null}
+
             },
             new String [] {
                 "N intento", "Digito 1", "Digito 2", "Digito 3", "Digito 4", "Pin 1", "Pin 2", "Pin 3", "Pin 4"

@@ -110,6 +110,7 @@ public class VentanaJuego extends javax.swing.JFrame {
     private void automaticoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_automaticoActionPerformed
         VentanaAuto vAuto=new VentanaAuto(codigo);
         vAuto.setVisible(true);
+        vAuto.nJuego();
     }//GEN-LAST:event_automaticoActionPerformed
 
 

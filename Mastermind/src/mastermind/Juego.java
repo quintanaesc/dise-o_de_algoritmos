@@ -30,20 +30,22 @@ public class Juego {
         }
         
         if (a <= clone.size()) {
-            if (clone.containsValue(check.get(a)) && existen[(int)check.get(a)]==false) {
+            if (clone.containsValue(check.get(a))) {
                 for (int i = 1; i <= clone.size(); i++) {
-                    if (clone.get(i) == check.get(i)) {
+                    if (clone.get(i) == check.get(i) && existen[(int)check.get(a)-1]==false) {
                         System.out.print("|  RED  |");
                         clone.replace(i, 0);
                         pines.add(2);
+                        existen[(int)check.get(a)-1]=true;
                         break;
                     }
                 }
                 for (int i = 1; i <= clone.size(); i++) {
-                    if (clone.get(i) == check.get(a)) {
+                    if (clone.get(i) == check.get(a) && existen[(int)check.get(a)-1]==false) {
                         System.out.print("| WHITE |");
                         clone.replace(i, 0);
                         pines.add(1);
+                        existen[(int)check.get(a)-1]=true;
                         break;
                     }
                 }              
